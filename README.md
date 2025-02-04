@@ -1,3 +1,6 @@
+join my telegram 
+https://t.me/Offical_Im_hanzou
+
 # Naoris Protocol Auto Referral Bot
 
 This bot automates the process of creating accounts and using referral codes for the Naoris Protocol.
