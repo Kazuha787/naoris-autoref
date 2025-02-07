@@ -5,26 +5,20 @@ const { getRandomProxy, loadProxies } = require("./classes/proxy");
 const chalk = require("chalk");
 const fs = require("fs");
 
-// Banner inside main.js
-const banner = () => {
-  const text = `
-  ▗▖ ▗▖ ▗▄▖ ▗▄▄▄▄▖▗▖ ▗▖▗▖ ▗▖ ▗▄▖ 
-  ▐▌▗▞▘▐▌ ▐▌   ▗▞▘▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌
-  ▐▛▚▖ ▐▛▀▜▌ ▗▞▘  ▐▌ ▐▌▐▛▀▜▌▐▛▀▜▌
-  ▐▌ ▐▌▐▌ ▐▌▐▙▄▄▄▖▝▚▄▞▘▐▌ ▐▌▐▌ ▐▌
-                               
-  `;
-
-  const separator = "═".repeat(60);
-  return `${chalk.cyan(text)}\n${chalk.white(separator)}`;
-};
-
 async function main() {
-  console.log(banner()); // Display the updated banner
+  console.log(
+    chalk.cyan(`
+▗▖ ▗▖ ▗▄▖ ▗▄▄▄▄▖▗▖ ▗▖▗▖ ▗▖ ▗▄▖ 
+▐▌▗▞▘▐▌ ▐▌   ▗▞▘▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌
+▐▛▚▖ ▐▛▀▜▌ ▗▞▘  ▐▌ ▐▌▐▛▀▜▌▐▛▀▜▌
+▐▌ ▐▌▐▌ ▐▌▐▙▄▄▄▖▝▚▄▞▘▐▌ ▐▌▐▌ ▐                                       
+ By : Kazuha
+ github.com/Kazuha787
+  `)
+  );
 
   const refCode = await prompt(chalk.yellow("Enter Referral Code: "));
   const count = parseInt(await prompt(chalk.yellow("How many do you want? ")));
-
   const proxiesLoaded = loadProxies();
   if (!proxiesLoaded) {
     logMessage(null, null, "No Proxy. Using default IP", "warning");
@@ -35,7 +29,8 @@ async function main() {
 
   let accounts = [];
   if (fs.existsSync("accounts.json")) {
-    accounts = JSON.parse(fs.readFileSync("accounts.json", "utf8"));
+    const data = fs.readFileSync("accounts.json", "utf8");
+    accounts = JSON.parse(data);
   }
 
   try {
@@ -50,22 +45,18 @@ async function main() {
         const hashId = generateDeviceHash();
         const encryptWallet = await naoris.createEncryptedWallet();
         const account = await naoris.registerWallet(encryptWallet);
-
         if (account) {
           logMessage(i + 1, count, "Register Account Success", "success");
           const token = await naoris.getToken();
           logMessage(i + 1, count, `Get Token Done`, "success");
           const wallet = naoris.getWallet();
           successful++;
-
-          // Save address and mnemonic phrase
-          accountNaoris.write(`Address: ${wallet.address}\n`);
-          accountNaoris.write(`Mnemonic Phrase: ${wallet.mnemonic.phrase}\n`);
+          accountNaoris.write(`Adress : ${wallet.address}\n`);
+          accountNaoris.write(`Mnomic Phrase: ${wallet.mnemonic.phrase}\n`);
           accountNaoris.write("-".repeat(85) + "\n");
 
           accounts.push({
             walletAddress: wallet.address,
-            token: token,
             deviceHash: Number(hashId),
           });
         } else {
@@ -79,9 +70,11 @@ async function main() {
     accountNaoris.end();
     fs.writeFileSync("accounts.json", JSON.stringify(accounts, null, 2));
 
-    console.log(chalk.magenta("\n[*] Process Completed!"));
-    console.log(chalk.green(`[*] Successfully created ${successful} out of ${count} accounts.`));
-    console.log(chalk.magenta("[*] Results saved in accounts.txt and accounts.json"));
+    console.log(chalk.magenta("\n[*] Dono bang!"));
+    console.log(
+      chalk.green(`[*] Account dono ${successful} dari ${count} akun`)
+    );
+    console.log(chalk.magenta("[*] Result in accounts.txt and accounts.json"));
     rl.close();
   }
 }
